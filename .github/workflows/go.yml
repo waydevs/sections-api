@@ -30,7 +30,7 @@ jobs:
       uses: gwatts/go-coverage-action@v1.2.0
       with:
         cover-pkg: ./...
-        coverage-threshold: 90
+        coverage-threshold: 0
 
     - name: GolangCI-Lint Action
       uses: matoous/golangci-lint-action@v1.23.3
