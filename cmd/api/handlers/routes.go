@@ -10,7 +10,7 @@ const (
 )
 
 type DesignPatternGetter interface {
-	GetPattern(key string) designpatters.DesignPatternDTO
+	GetPattern(key string) designpatters.DesignPattern
 }
 
 func DesignPatternRoutes(router *gin.Engine, service DesignPatternGetter) *gin.Engine {

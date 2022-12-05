@@ -1,5 +1,5 @@
 package designpatters
 
-type DesignPatternDTO struct {
-	Name string
+type DesignPattern struct {
+	Title string
 }

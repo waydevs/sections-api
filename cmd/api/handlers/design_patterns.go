@@ -21,6 +21,6 @@ func (s DesignPatternsHandler) GetPatternByID(c *gin.Context) {
 	response := s.service.GetPattern("some-key")
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": response.Name,
+		"message": response.Title,
 	})
 }
