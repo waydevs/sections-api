@@ -13,6 +13,10 @@ const (
 	ctxTimeout = 10 * time.Second
 )
 
+var (
+	ErrNotFound = mongo.ErrNoDocuments
+)
+
 type DatabaseHelper interface {
 	Collection(name string) CollectionHelper
 	Client() ClientHelper

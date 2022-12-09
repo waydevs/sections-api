@@ -18,6 +18,9 @@ func (d designPatternRepositoryMock) GetByID(_ context.Context, id string) (repo
 			Title: "ok",
 		}, nil
 
+	case "not-found":
+		return repository.DesignPattern{}, repository.ErrNotFound
+
 	default:
 		return repository.DesignPattern{}, errors.New("some-error")
 	}
@@ -26,9 +29,7 @@ func (d designPatternRepositoryMock) GetByID(_ context.Context, id string) (repo
 func (d designPatternRepositoryMock) Create(_ context.Context, designPattern repository.DesignPattern) (repository.DesignPattern, error) {
 	switch designPattern.Title {
 	case "ok":
-		return repository.DesignPattern{
-			Title: "ok",
-		}, nil
+		return designPattern, nil
 
 	default:
 		return repository.DesignPattern{}, errors.New("some-error")
@@ -48,9 +49,7 @@ func (d designPatternRepositoryMock) Delete(_ context.Context, id string) error 
 func (d designPatternRepositoryMock) Update(_ context.Context, designPattern repository.DesignPattern) (repository.DesignPattern, error) {
 	switch designPattern.Title {
 	case "ok":
-		return repository.DesignPattern{
-			Title: "ok",
-		}, nil
+		return designPattern, nil
 
 	default:
 		return repository.DesignPattern{}, errors.New("some-error")
@@ -75,15 +74,23 @@ func TestService_GetByID(t *testing.T) {
 			name: "ok",
 			id:   "ok",
 			expectedResponse: DesignPattern{
+				// Is an empty ObjectID
+				ID:    "000000000000000000000000",
 				Title: "ok",
 			},
 			expectedError: nil,
 		},
 		{
+			name:             "error not found",
+			id:               "not-found",
+			expectedResponse: DesignPattern{},
+			expectedError:    ErrDesignPatternNotFound,
+		},
+		{
 			name:             "error",
 			id:               "error",
 			expectedResponse: DesignPattern{},
-			expectedError:    errors.New("some-error"),
+			expectedError:    ErrSomethingWentWrong,
 		},
 	}
 
@@ -110,9 +117,12 @@ func TestService_Create(t *testing.T) {
 		{
 			name: "ok",
 			designPattern: DesignPattern{
+				ID:    "638d568a507b6e07cd39de82",
 				Title: "ok",
 			},
 			expectedResponse: DesignPattern{
+				// Is an empty ObjectID
+				ID:    "000000000000000000000000",
 				Title: "ok",
 			},
 			expectedError: nil,
@@ -121,7 +131,7 @@ func TestService_Create(t *testing.T) {
 			name:             "error",
 			designPattern:    DesignPattern{},
 			expectedResponse: DesignPattern{},
-			expectedError:    errors.New("some-error"),
+			expectedError:    ErrSomethingWentWrong,
 		},
 	}
 
@@ -152,7 +162,7 @@ func TestService_Delete(t *testing.T) {
 		{
 			name:          "error",
 			id:            "error",
-			expectedError: errors.New("some-error"),
+			expectedError: ErrSomethingWentWrong,
 		},
 	}
 
@@ -178,9 +188,11 @@ func TestService_Update(t *testing.T) {
 		{
 			name: "ok",
 			designPattern: DesignPattern{
+				ID:    "638d568a507b6e07cd39de82",
 				Title: "ok",
 			},
 			expectedResponse: DesignPattern{
+				ID:    "638d568a507b6e07cd39de82",
 				Title: "ok",
 			},
 			expectedError: nil,
@@ -189,7 +201,7 @@ func TestService_Update(t *testing.T) {
 			name:             "error",
 			designPattern:    DesignPattern{},
 			expectedResponse: DesignPattern{},
-			expectedError:    errors.New("some-error"),
+			expectedError:    ErrSomethingWentWrong,
 		},
 	}
 

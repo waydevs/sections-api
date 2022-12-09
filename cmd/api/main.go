@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/waydevs/sections-api/cmd/api/handlers"
 	"github.com/waydevs/sections-api/internal/designpatters"
 	"github.com/waydevs/sections-api/internal/platform/repository"
 )
@@ -26,11 +27,10 @@ func main() {
 
 	db := repository.NewDatabase(dbConn)
 
-	// En realidad seria -> service := repository.NewDesignPatterns(db)
-	// Pero como no vamos a usar service lo dejo asi como ejemplo.
 	desigPatternsRepositroy := repository.NewDesignPatterns(db)
+	designPatternsService := designpatters.NewService(desigPatternsRepositroy)
 
-	designpatters.NewService(desigPatternsRepositroy)
+	r = handlers.DesignPatternRoutes(r, designPatternsService)
 
 	r.Run()
 }

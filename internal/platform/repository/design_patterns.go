@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 const (
@@ -32,6 +33,9 @@ func (s *DesignPatterns) GetByID(ctx context.Context, id string) (DesignPattern,
 	var designPattern DesignPattern
 	err = result.Decode(&designPattern)
 	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return DesignPattern{}, ErrNotFound
+		}
 		return DesignPattern{}, err
 	}
 
